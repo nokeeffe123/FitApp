@@ -4,12 +4,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen'; // Import your screen
 import NextPage from '../screens/NextPage'; // Import your screen
 import MachineDetails from '../screens/MachineDetails'; // Import your screen
+import RecordSet from '../screens/RecordSet'; // Import your screen
 
 const Stack = createStackNavigator({
   screens: {
     Home: HomeScreen,
     NextPage: NextPage,
     MachineDetails: MachineDetails,
+    RecordSet: RecordSet,
   },
 });
 
@@ -20,6 +22,7 @@ const Router = () => {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="NextPage" component={NextPage} />
         <Stack.Screen name="MachineDetails" component={MachineDetails} />
+        <Stack.Screen name="RecordSet" component={RecordSet} />
       </Stack.Navigator>
     </NavigationContainer>
   );
