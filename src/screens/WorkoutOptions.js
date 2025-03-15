@@ -1,30 +1,16 @@
 // screens/WorkoutOptions.js
-import React, {useState} from 'react';
-import { View, FlatList, Text, StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import { List, Text } from 'react-native-paper';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
+const workoutOptionsList = [
+  { id: 1, title: 'Lat Pulldown', description: 'back muscles' },
+  { id: 2, title: 'Leg Press', description: 'quadriceps, hamstrings, and glutes' },
+  { id: 3, title: 'Butterfly Machine', description: 'chest muscles (pectorals)' },
 ];
 
-const Item = ({ item, onPress, backgroundColor, textColor }) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor }]}>
-    <Text style={[styles.title, { color: textColor }]}>{item.title}</Text>
-  </TouchableOpacity>
-);
-
-const WorkoutOptions = ({route, navigation}) => {
+const WorkoutOptions = ({ route, navigation }) => {
   const { date } = route.params || {};
   const [selectedId, setSelectedId] = useState();
 
@@ -33,30 +19,24 @@ const WorkoutOptions = ({route, navigation}) => {
     navigation.navigate('MachineDetails', { itemId: item.id, itemTitle: item.title }); // Navigate to MachineDetails
   };
 
-  const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
-    const color = item.id === selectedId ? 'white' : 'black';
-
-    return (
-      <Item
-        item={item}
-        onPress={() => handleItemPress(item)}
-        backgroundColor={backgroundColor}
-        textColor={color}
-      />
-    );
-  };
-
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <Text>Today's Date: {date}</Text>
-        <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          extraData={selectedId}
-        />
+        {/* <Text variant="headlineLarge">Workout Options</Text> */}
+        <Text>Today's {date} sessoin </Text>
+        {workoutOptionsList.map((item) => (
+          <List.Item
+            key={item.id}  // Unique key required for lists
+            title={item.title}
+            description={item.description}
+            onPress={() => handleItemPress(item)}
+            left={props => <List.Icon {...props} icon="star" />} // Dumbbell icon
+            right={() => (
+              <Text>Go</Text>
+            )}
+            style={styles.listItem}
+          />
+        ))}
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -65,16 +45,24 @@ const WorkoutOptions = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    // marginTop: StatusBar.currentHeight || 0,
+    padding: 10,
+    backgroundColor: '#fff', // White background
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  listItem: {
+    backgroundColor: '#f0f0f0', // Light gray background
+    borderRadius: 10, // Rounded corners
+    marginVertical: 5, // Space between items
+    padding: 10, // Inner padding
   },
   title: {
-    fontSize: 32,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333' // Darker text
+  },
+  description: {
+    fontSize: 14,
+    color: '#666' // Lighter gray for description
   },
 });
 
