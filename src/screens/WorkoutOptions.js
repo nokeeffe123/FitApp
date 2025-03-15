@@ -11,7 +11,7 @@ const workoutOptionsList = [
 ];
 
 const WorkoutOptions = ({ route, navigation }) => {
-  const { date } = route.params || {};
+  const { workout_session } = route.params || {};
   const [selectedId, setSelectedId] = useState();
 
   const handleItemPress = (item) => {
@@ -23,7 +23,7 @@ const WorkoutOptions = ({ route, navigation }) => {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         {/* <Text variant="headlineLarge">Workout Options</Text> */}
-        <Text>Today's {date} sessoin </Text>
+        <Text>Today's {workout_session.date} Session </Text>
         {workoutOptionsList.map((item) => (
           <List.Item
             key={item.id}  // Unique key required for lists

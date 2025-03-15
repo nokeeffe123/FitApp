@@ -1,0 +1,25 @@
+[
+    {
+        "id": "11212wsadiuhsu218732198",
+        "date": "2025-03-15",
+        "exercises": [
+            {
+                "id": "12198iuwagyewq8dwqewqe",
+                "name": "lat pull",
+                "sets": [
+                    {
+                        "name": "set1",
+                        "reps": "11",
+                        "weight": "50"
+
+                    },
+                    {
+                        "name": "set2",
+                        "reps": "22",
+                        "weight": "60"
+                    }
+                ]
+            }
+        ]
+    }
+]

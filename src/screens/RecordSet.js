@@ -2,6 +2,33 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+// Function to save data to AsyncStorage
+const saveData = async (weight) => {
+    console.log('Data saving called');
+    try {
+        await AsyncStorage.setItem('weight', weight);
+        console.log('Data saved');
+    } catch (error) {
+        // Error saving data
+    }
+};
+
+// Function to retrieve saved data from AsyncStorage
+const retrieveData = async () => {
+    try {
+        const value = await AsyncStorage.getItem('weight');
+        if (value !== null) {
+            // We have data!!
+            console.log(value);
+            return value;
+        }
+    } catch (error) {
+        // Error retrieving data
+    }
+};
 
 const MachineDetails = () => {
     const [weight, setWeight] = useState('');
@@ -28,9 +55,7 @@ const MachineDetails = () => {
             />
             <Button
                 mode="contained"
-                onPress={() => {
-                    console.log(`Weight: ${weight} Reps: ${reps}`);
-                }}>
+                onPress={saveData(weight)}>
                 Record Set
             </Button>
         </SafeAreaView>
@@ -52,6 +77,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         width: 300,
     },
+    savedText: { marginTop: 20, fontSize: 16, fontWeight: 'bold' },
 });
 
 export default MachineDetails;
