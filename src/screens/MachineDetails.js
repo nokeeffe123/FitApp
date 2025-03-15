@@ -1,17 +1,19 @@
 // screens/MachineDetails.js
 import React from 'react';
-import { SafeAreaView, Text, StyleSheet, Button } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { Text, Button } from 'react-native-paper';
 
 const MachineDetails = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Welcome to the Details of the Machine Page!</Text>
+      <Text variant="headlineLarge">Machine Details</Text>
       <Button
-        title="Record Set"
+        mode="contained"
         onPress={() => {
           navigation.navigate('RecordSet');
-        }}
-      />
+        }}>
+        Record Set
+      </Button>
     </SafeAreaView>
   );
 };
