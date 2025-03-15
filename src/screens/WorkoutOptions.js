@@ -1,4 +1,4 @@
-// screens/NextPage.js
+// screens/WorkoutOptions.js
 import React, {useState} from 'react';
 import { View, FlatList, Text, StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
@@ -24,7 +24,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
   </TouchableOpacity>
 );
 
-const NextPage = ({route, navigation}) => {
+const WorkoutOptions = ({route, navigation}) => {
   const { date } = route.params || {};
   const [selectedId, setSelectedId] = useState();
 
@@ -78,4 +78,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NextPage;
+export default WorkoutOptions;
