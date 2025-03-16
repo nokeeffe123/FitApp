@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 const saveData = async (workout_session) => {
   console.log('Data saving called', workout_session);
   try {
-      await AsyncStorage.setItem('workout_session', workout_session);
+      await AsyncStorage.setItem('workout_session'+workout_session.date, workout_session);
       console.log('Data saved', workout_session);
   } catch (error) {
       // Error saving data
@@ -17,7 +17,7 @@ const saveData = async (workout_session) => {
 
 const HomeScreen = ({ navigation }) => {
   const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-  const workout_session = {id: "randome_uid", date: today, exercises: []};
+  const workout_session = {id: "randome_uid", date: today};
   return (
     <SafeAreaView style={[styles.container]}>
       <Text variant="headlineLarge">Hello!</Text>

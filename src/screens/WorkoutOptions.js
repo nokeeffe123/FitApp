@@ -16,7 +16,7 @@ const WorkoutOptions = ({ route, navigation }) => {
 
   const handleItemPress = (item) => {
     setSelectedId(item.id); // Update selectedId state
-    navigation.navigate('MachineDetails', { itemId: item.id, itemTitle: item.title }); // Navigate to MachineDetails
+    navigation.navigate('RecordSet', { machineId: item.id, machineTitle: item.title, workout_session }); // Navigate to RecordSet
   };
 
   return (
