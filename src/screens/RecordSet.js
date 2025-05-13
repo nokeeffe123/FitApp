@@ -2,20 +2,79 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, FlatList, View } from 'react-native';
 import { Text, Surface, Button, TextInput, Card } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
 const RecordSet = ({ route, navigation }) => {
-    const workout_session = route.params.workout_session || {};
+    const { workout_session, machineId, machineTitle } = route.params;
+    const [sessionData, setSessionData] = useState(null);
+    const sessionKey = 'workout_session' + workout_session.date;
     const [sets, setSets] = useState([]);
     const [weight, setWeight] = useState('');
     const [reps, setReps] = useState('');
 
-    const saveSet = () => {
+    const addMachineToSession = async (workout_session, machineId, machineTitle) => {
+      const machineKey = `${machineTitle}_${machineId}`;
+
+      try {
+        const stored = await AsyncStorage.getItem(sessionKey);
+        let session = stored ? JSON.parse(stored) : { date: workout_session.date, machines: {} };
+
+        if (!session.machines) session.machines = {};
+
+        // Avoid overwriting if already exists
+        if (!session.machines[machineKey]) {
+          session.machines[machineKey] = {
+            machineId,
+            machineTitle,
+            sets: [],
+          };
+
+          await AsyncStorage.setItem(sessionKey, JSON.stringify(session));
+          console.log('✅ Machine added:', session.machines[machineKey]);
+        } else {
+          console.log('ℹ️ Machine already exists in session');
+        }
+      } catch (err) {
+        console.error('❌ Error appending machine:', err);
+      }
+    };
+
+    useEffect(() => {
+      addMachineToSession(workout_session, route.params.machineId, route.params.machineTitle);
+    }, []);
+    // Load sets from storage on mount
+
+    const saveSet = async () => {
         if (!weight || !reps) return; // Prevent empty inputs
 
         const newSet = { weight, reps }; // Create set object
-        setSets([...sets, newSet]); // Add new set to list
-        setWeight(''); // Reset input
-        setReps('');
+        const sessionKey = 'workout_session' + workout_session.date;
+        const machineKey = `${machineTitle}_${machineId}`;
+
+        try {
+            const stored = await AsyncStorage.getItem(sessionKey);
+            if (!stored) {
+                  console.error('Session not found');
+                  return;
+            }
+            const session = JSON.parse(stored);
+            if (!session.machines || !session.machines[machineKey]) {
+                  console.error('Machine not found in session');
+                  return;
+            }
+            // Update sets for this machine
+            const updatedSets = [...(session.machines[machineKey].sets || []), newSet];
+            session.machines[machineKey].sets = updatedSets;
+            await AsyncStorage.setItem(sessionKey, JSON.stringify(session));
+            console.log('✅ Set saved:', newSet);
+            // Update local UI state
+            setSets(updatedSets);
+            setWeight('');
+            setReps('');
+        } catch (e) {
+            console.error('Failed to save the sets.', e);
+        }
     };
 
     return (
@@ -24,7 +83,7 @@ const RecordSet = ({ route, navigation }) => {
                 <Text style={styles.text}>Record you set</Text>
                 <Text style={styles.label}>Enter weight:</Text>
                 <TextInput
-                    label="Enter your name"
+                    label="Enter weight"
                     value={weight}
                     onChangeText={(text) => setWeight(text.replace(/[^0-9]/g, ''))}  // Updating the state
                     style={styles.input}
@@ -35,7 +94,7 @@ const RecordSet = ({ route, navigation }) => {
                     keyboardType="numeric" // Ensures only numbers are entered
                     value={reps}
                     onChangeText={(text) => setReps(text.replace(/[^0-9]/g, ''))} // Allow only digits
-                    placeholder="Type a number"
+                    placeholder="Enter no of reps"
                     mode="outlined"
                     style={styles.input}
                 />
